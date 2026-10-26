@@ -463,8 +463,7 @@ function Landing() {
       <footer className="relative z-10 mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 border-t border-border px-4 py-7 text-xs text-muted-foreground sm:px-6">
         <Brand className="text-sm text-foreground" />
         <span className="inline-flex items-center gap-1.5">
-          <BriefcaseBusiness className="size-3.5" /> Training &amp; Placement Cell · Demo
-          environment with sample data
+          <BriefcaseBusiness className="size-3.5" /> Training &amp; Placement Cell · Campus Placement Portal
         </span>
       </footer>
     </div>

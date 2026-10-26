@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DEMO_ACCOUNTS, login, registerAccount, setSession, type Branch, type Role } from "@/lib/store";
+import { login, registerAccount, setSession, type Branch, type Role } from "@/lib/store";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -34,12 +34,18 @@ const HOME: Record<Role, string> = {
   admin: "/admin",
 };
 
+const ROLE_LABELS: Record<Role, string> = {
+  student: "Student",
+  recruiter: "Recruiter",
+  admin: "Placement Officer",
+};
+
 function LoginPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [role, setRole] = useState<Role>("student");
-  const [email, setEmail] = useState(DEMO_ACCOUNTS.student.email);
-  const [password, setPassword] = useState("campushire");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -51,21 +57,17 @@ function LoginPage() {
 
   const onRole = (r: Role) => {
     setRole(r);
-    if (mode === "login") setEmail(DEMO_ACCOUNTS[r].email);
   };
 
   const changeMode = (next: "login" | "signup") => {
     setMode(next);
-    if (next === "signup") {
-      if (role === "admin") setRole("student");
-      setName("");
-      setCompany("");
-      setEmail("");
-      setPassword("");
-    } else {
-      setEmail(DEMO_ACCOUNTS[role === "admin" ? "admin" : role].email);
-      setPassword("campushire");
+    if (next === "signup" && role === "admin") {
+      setRole("student");
     }
+    setName("");
+    setCompany("");
+    setEmail("");
+    setPassword("");
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -130,7 +132,7 @@ function LoginPage() {
           </p>
         </div>
         <p className="text-xs text-primary-foreground/40">
-          Training &amp; Placement Cell · Demo environment
+          Training &amp; Placement Cell · Campus Portal
         </p>
       </aside>
 
@@ -170,13 +172,13 @@ function LoginPage() {
             {mode === "signup" ? (
               <div className="space-y-1.5">
                 <Label htmlFor="name">Full name</Label>
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} required autoComplete="name" />
+                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} placeholder="e.g. Rahul Sharma" required autoComplete="name" />
               </div>
             ) : null}
             {mode === "signup" && role === "recruiter" ? (
               <div className="space-y-1.5">
                 <Label htmlFor="company">Company</Label>
-                <Input id="company" value={company} onChange={(e) => setCompany(e.target.value)} maxLength={120} required autoComplete="organization" />
+                <Input id="company" value={company} onChange={(e) => setCompany(e.target.value)} maxLength={120} placeholder="Company name" required autoComplete="organization" />
               </div>
             ) : null}
             <div className="space-y-1.5">
@@ -186,7 +188,9 @@ function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@college.edu.in"
                 autoComplete="email"
+                required
               />
             </div>
             {mode === "signup" && role === "student" ? (
@@ -224,6 +228,7 @@ function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
                 autoComplete={mode === "login" ? "current-password" : "new-password"}
                 minLength={mode === "signup" ? 8 : undefined}
                 maxLength={128}
@@ -231,17 +236,17 @@ function LoginPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={submitting}>
-              {submitting ? "Please wait…" : mode === "login" ? `Continue as ${DEMO_ACCOUNTS[role].label.toLowerCase()}` : `Create ${role} account`}
+              {submitting ? "Please wait…" : mode === "login" ? `Sign in as ${ROLE_LABELS[role]}` : `Create ${role} account`}
             </Button>
           </form>
 
-          <p className="mt-6 rounded-lg border-l-2 border-primary bg-secondary px-4 py-3 text-xs leading-relaxed text-muted-foreground">
-            {mode === "login"
-              ? <><strong className="font-semibold text-foreground">Demo:</strong> Accounts are pre-filled. Password is <strong className="font-semibold text-foreground">campushire</strong>. Sessions checked by backend and stored in MongoDB.</>
-              : role === "recruiter"
+          {mode === "signup" ? (
+            <p className="mt-6 rounded-lg border-l-2 border-primary bg-secondary px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+              {role === "recruiter"
                 ? "New recruiter accounts are created as pending and must be approved by the Placement Cell."
-                : "Use a password with at least 8 characters. Your student profile is saved to the database."}
-          </p>
+                : "Use a password with at least 8 characters. Your student profile is saved securely."}
+            </p>
+          ) : null}
         </div>
       </main>
     </div>
