@@ -130,8 +130,8 @@ const server = createServer(async (request, response) => {
   }
 
   try {
-    if (request.method === "GET" && pathname === "/health") {
-      send(response, 200, { status: "ok" });
+    if (request.method === "GET" && (pathname === "/health" || pathname === "/")) {
+      send(response, 200, { status: "ok", message: "CampusHire API is running" });
       return;
     }
 
