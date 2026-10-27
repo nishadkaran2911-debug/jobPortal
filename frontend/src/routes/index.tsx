@@ -7,7 +7,10 @@ import {
   MapPin,
   Search,
   ShieldCheck,
+  Sparkles,
+  TrendingUp,
   Users,
+  Zap,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -16,6 +19,15 @@ import { Brand } from "@/components/Shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatCtc, useStore } from "@/lib/store";
+
+const TRENDING = ["Software Engineer", "Data Analyst", "Product Manager", "Remote", "Finance"];
+
+const STATS = [
+  { icon: BriefcaseBusiness, label: "Active drives", value: "120+" },
+  { icon: Building2, label: "Companies", value: "80+" },
+  { icon: Users, label: "Students placed", value: "2,400+" },
+  { icon: TrendingUp, label: "Offer rate", value: "94%" },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -111,18 +123,27 @@ function Landing() {
       <main className="relative z-10">
         <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_.9fr] lg:gap-16">
           <div className="landing-hero-copy">
-            <p className="landing-enter text-xs font-semibold uppercase tracking-[.16em] text-primary">
+            {/* Badge */}
+            <div className="landing-enter hero-badge">
+              <Sparkles className="size-3" />
               Campus placements · 2026–27
-            </p>
-            <h1 className="landing-enter landing-enter-delay mt-4">
+            </div>
+
+            {/* Headline */}
+            <h1 className="landing-enter landing-enter-delay hero-headline mt-5">
               Find your place
               <br />
-              in <em>what comes</em> next.
+              in{" "}
+              <span className="hero-headline-accent">what comes</span>
+              {" "}next.
             </h1>
-            <p className="landing-enter landing-enter-delay-2 mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Explore placement drives approved by your college, check your eligibility and keep
-              every application in view.
+
+            <p className="landing-enter landing-enter-delay-2 hero-subline mt-5">
+              Explore placement drives approved by your college, check your
+              eligibility and keep every application in view.
             </p>
+
+            {/* ── Search form ── */}
             <form
               className="landing-search mt-8"
               onSubmit={(e) => {
@@ -132,31 +153,84 @@ function Landing() {
               role="search"
               aria-label="Search placement drives"
             >
-              <label className="flex min-w-0 items-center gap-2 px-2">
-                <Search aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
-                <Input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Role, company or skill"
-                  aria-label="Search role, company or skill"
-                />
-              </label>
-              <label className="flex min-w-0 items-center gap-2 border-t border-border px-2 sm:border-l sm:border-t-0">
-                <MapPin aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
-                <Input
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="City or remote"
-                  aria-label="Filter by location"
-                />
-              </label>
-              <Button type="submit">
-                Find drives <ArrowRight />
-              </Button>
+              {/* Field 1 */}
+              <div className="search-field">
+                <Search className="search-field-icon" aria-hidden="true" />
+                <div className="search-field-inner">
+                  <label className="search-field-label" htmlFor="search-role">
+                    Role / Company
+                  </label>
+                  <Input
+                    id="search-role"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="e.g. Software Engineer"
+                    aria-label="Search role, company or skill"
+                    className="search-field-input"
+                  />
+                </div>
+              </div>
+
+              {/* Divider */}
+              <span className="search-divider" aria-hidden="true" />
+
+              {/* Field 2 */}
+              <div className="search-field">
+                <MapPin className="search-field-icon" aria-hidden="true" />
+                <div className="search-field-inner">
+                  <label className="search-field-label" htmlFor="search-location">
+                    Location
+                  </label>
+                  <Input
+                    id="search-location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="City or remote"
+                    aria-label="Filter by location"
+                    className="search-field-input"
+                  />
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button type="submit" className="search-submit" aria-label="Search drives">
+                <Search className="size-5" />
+                <span>Search</span>
+              </button>
             </form>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Browse approved opportunities. Sign in to see your eligibility and apply.
-            </p>
+
+            {/* Trending chips */}
+            <div className="trending-row mt-4">
+              <span className="trending-label">
+                <Zap className="size-3" /> Trending:
+              </span>
+              {TRENDING.map((term) => (
+                <button
+                  key={term}
+                  type="button"
+                  className="trending-chip"
+                  onClick={() => {
+                    setQuery(term);
+                    document.getElementById("opportunities")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  {term}
+                </button>
+              ))}
+            </div>
+
+            {/* Stats row */}
+            <div className="hero-stats mt-8">
+              {STATS.map(({ icon: Icon, label, value }) => (
+                <div key={label} className="hero-stat">
+                  <span className="hero-stat-value">{value}</span>
+                  <span className="hero-stat-label">
+                    <Icon className="size-3" />
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <aside className="product-stage" aria-label="Illustrative CampusHire product preview">
