@@ -295,11 +295,10 @@
   }
 
   .landing-hero h1 {
-    font-family: var(--font-display);
-    font-style: italic;
+    font-family: var(--font-sans);
     max-width: 14ch;
     font-size: clamp(2.8rem, 5.5vw, 4.6rem);
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.07;
     color: var(--color-foreground);
@@ -333,10 +332,10 @@
 
   /* ── HERO HEADLINE ───────────────────────────────────────────────────────── */
   .hero-headline {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: clamp(2.8rem, 5.5vw, 4.4rem);
-    font-weight: 400;
-    line-height: 1.06;
+    font-weight: 700;
+    line-height: 1.08;
     letter-spacing: -0.03em;
     color: var(--color-foreground);
   }
